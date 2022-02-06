@@ -1,12 +1,14 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
 
 st.title('Исследование компьютерных игр, вышедших до 2016 года')
 
+DATA_URL = ('https://github.com/Aleks-nix/streamlit_apps/blob/main/computer_games.csv?raw=true')
 data_load_state = st.text('Загрузка данных -->')
-data_games = pd.read_csv('/Users/aleksandrverlan/Documents/PycharmProjects/streamlit_apps/computer_games.csv')
+# data_games = pd.read_csv('/Users/aleksandrverlan/Documents/PycharmProjects/streamlit_apps/computer_games.csv')
+data_games = pd.read_csv(DATA_URL)
+
 data_load_state.text('Загрузка завершена!')
 
 if st.checkbox('Показать сырые данные'):
