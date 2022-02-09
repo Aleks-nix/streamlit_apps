@@ -51,19 +51,20 @@ target = data_cars['Price']
 model_lgbm = LGBMRegressor(random_state=12345, n_estimators=500, max_depth=6, num_leaves=40)
 model_lgbm.fit(features, target)
 
-st.sidebar.subheader('Выбор автомобиля')
-option_brand = st.sidebar.selectbox('Бренд', sorted(data_cars['Brand'].unique()))
-option_model = st.sidebar.selectbox('Модель',
+# st.sidebar.subheader('Выбор автомобиля')
+st.subheader('Выбор автомобиля')
+option_brand = st.selectbox('Бренд', sorted(data_cars['Brand'].unique()))
+option_model = st.selectbox('Модель',
                             sorted(data_cars[data_cars['Brand'] == option_brand]['Model'].unique()))
-option_vehicle = st.sidebar.selectbox('Тип кузова', sorted(data_cars['VehicleType'].unique()))
-option_gearbox = st.sidebar.selectbox('Коробка передач', sorted(data_cars['Gearbox'].unique()))
-option_fuel = st.sidebar.selectbox('Тип топлива', sorted(data_cars['FuelType'].unique()))
-option_not_repaired = st.sidebar.selectbox('Не ремонтировался', sorted(data_cars['NotRepaired'].unique()))
-registration_year = st.sidebar.slider('Год регистрации', min_value=1970, max_value=2019)
-kilometer = st.sidebar.select_slider('Пробег (км)', options=['5000', '10000', '20000', '30000', '40000',
+option_vehicle = st.selectbox('Тип кузова', sorted(data_cars['VehicleType'].unique()))
+option_gearbox = st.selectbox('Коробка передач', sorted(data_cars['Gearbox'].unique()))
+option_fuel = st.selectbox('Тип топлива', sorted(data_cars['FuelType'].unique()))
+option_not_repaired = st.selectbox('Не ремонтировался', sorted(data_cars['NotRepaired'].unique()))
+registration_year = st.slider('Год регистрации', min_value=1970, max_value=2019)
+kilometer = st.select_slider('Пробег (км)', options=['5000', '10000', '20000', '30000', '40000',
                                                              '50000', '60000', '70000', '80000', '90000',
                                                              '100000', '125000', '150000'])
-power = st.sidebar.slider('Мощность (л.с.)', min_value=50, max_value=500)
+power = st.slider('Мощность (л.с.)', min_value=50, max_value=500)
 
 
 features_test = [[option_vehicle, registration_year, option_gearbox, power, option_model, kilometer, option_fuel,
