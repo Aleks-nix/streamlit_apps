@@ -4,7 +4,8 @@ from lightgbm import LGBMRegressor
 
 st.title('Предсказание цены автомобиля')
 
-st.caption('Эта программа всего лишь демонстрация. Модель обучается на данных свободного доступа. '
+st.caption('Эта страница предназначена только для демонстрационных целей. '
+           'Модель обучается на данных свободного доступа. '
            'Все выпадающие окна будут содержать данные таблицы без преобразования (название брендов, моделей, стоимость и т.д.)')
 
 st.subheader('Описание данных для обучения модели')
@@ -34,10 +35,18 @@ def load_data():
     # Поменяем тип данных на категориальный в следующих стобцах
     for col in ['VehicleType', 'Gearbox', 'Model', 'FuelType', 'Brand', 'NotRepaired']:
         data[col] = data[col].astype('category')
-    return data
+
+    # Выделим переменные признаки и признак, который нужно предсказать для каждой таблицы
+    features = data.drop('Price', axis=1)
+    target = data['Price']
+
+    model_lgbm = LGBMRegressor(random_state=12345, n_estimators=500, max_depth=6, num_leaves=40)
+    model_lgbm.fit(features, target)
+
+    return data, model_lgbm
 
 data_load_state = st.text('Загрузка данных -->')
-data_cars = load_data()
+data_cars, model_lgbm = load_data()
 data_load_state.text('Загрузка завершена!')
 
 if st.checkbox('Показать данные для обучения'):
@@ -45,11 +54,11 @@ if st.checkbox('Показать данные для обучения'):
     st.write(data_cars.head(10))
 
 # Выделим переменные признаки и признак, который нужно предсказать для каждой таблицы
-features = data_cars.drop('Price', axis=1)
-target = data_cars['Price']
+# features = data_cars.drop('Price', axis=1)
+# target = data_cars['Price']
 
-model_lgbm = LGBMRegressor(random_state=12345, n_estimators=500, max_depth=6, num_leaves=40)
-model_lgbm.fit(features, target)
+# model_lgbm = LGBMRegressor(random_state=12345, n_estimators=500, max_depth=6, num_leaves=40)
+# model_lgbm.fit(features, target)
 
 st.sidebar.subheader('Выбор автомобиля')
 option_brand = st.sidebar.selectbox('Бренд', sorted(data_cars['Brand'].unique()))
@@ -70,11 +79,18 @@ features_test = [[option_vehicle, registration_year, option_gearbox, power, opti
                   option_brand, option_not_repaired]]
 
 
-features_columns = features.columns
+# features_columns = features.columns
+features_columns = data_cars.drop('Price', axis=1).columns
 df_test = pd.DataFrame(data = features_test, columns = features_columns)
 for col in ['VehicleType', 'Gearbox', 'Model', 'FuelType', 'Brand', 'NotRepaired']:
     df_test[col] = df_test[col].astype('category')
 df_test['Kilometer'] = df_test['Kilometer'].astype('int')
-
 predictions = model_lgbm.predict(df_test)
-st.header(f'Примерная стоимоть автомобиля: {round(round(predictions[0], -1))} €')
+
+if st.button('Расчет стоимости'):
+     st.header(f'Примерная стоимоть автомобиля: {round(round(predictions[0], -1))} €')
+else:
+     st.write('Необходимо нажать кнопку')
+
+# predictions = model_lgbm.predict(df_test)
+# st.header(f'Примерная стоимоть автомобиля: {round(round(predictions[0], -1))} €')
