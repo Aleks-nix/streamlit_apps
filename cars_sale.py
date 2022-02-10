@@ -53,12 +53,6 @@ if st.checkbox('Показать данные для обучения'):
     st.subheader('Данные для обучения (10 строк)')
     st.write(data_cars.head(10))
 
-# Выделим переменные признаки и признак, который нужно предсказать для каждой таблицы
-# features = data_cars.drop('Price', axis=1)
-# target = data_cars['Price']
-
-# model_lgbm = LGBMRegressor(random_state=12345, n_estimators=500, max_depth=6, num_leaves=40)
-# model_lgbm.fit(features, target)
 
 st.sidebar.subheader('Выбор автомобиля')
 option_brand = st.sidebar.selectbox('Бренд', sorted(data_cars['Brand'].unique()))
@@ -79,7 +73,6 @@ features_test = [[option_vehicle, registration_year, option_gearbox, power, opti
                   option_brand, option_not_repaired]]
 
 
-# features_columns = features.columns
 features_columns = data_cars.drop('Price', axis=1).columns
 df_test = pd.DataFrame(data = features_test, columns = features_columns)
 for col in ['VehicleType', 'Gearbox', 'Model', 'FuelType', 'Brand', 'NotRepaired']:
@@ -91,6 +84,3 @@ if st.button('Расчет стоимости'):
      st.header(f'Примерная стоимоть автомобиля: {round(round(predictions[0], -1))} €')
 else:
      st.write('Необходимо нажать кнопку')
-
-# predictions = model_lgbm.predict(df_test)
-# st.header(f'Примерная стоимоть автомобиля: {round(round(predictions[0], -1))} €')
