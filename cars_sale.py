@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from lightgbm import LGBMRegressor
+import joblib
 
 st.title('Предсказание цены автомобиля')
 
