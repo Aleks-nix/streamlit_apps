@@ -40,8 +40,7 @@ def load_data():
     features = data.drop('Price', axis=1)
     target = data['Price']
 
-    model_lgbm = LGBMRegressor(random_state=12345, n_estimators=500, max_depth=6, num_leaves=40)
-    model_lgbm.fit(features, target)
+    model_lgbm = joblib.load('lgb.pkl')
 
     return data, model_lgbm
 
